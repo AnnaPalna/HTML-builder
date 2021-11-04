@@ -1,1 +1,5 @@
 fake styles
+
+body {
+    background-color: red;
+}
