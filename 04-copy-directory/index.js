@@ -2,6 +2,7 @@ const { promises: fs } = require('fs');
 const path = require('path');
 
 async function copyDir(initialPathMain, copyPathMain) {
+    await fs.rm(copyPathMain, { recursive: true, force: true })
     await fs.mkdir(copyPathMain, { recursive: true })
 
     const files = await fs.readdir(initialPathMain, { withFileTypes: true});
