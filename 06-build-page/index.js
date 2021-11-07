@@ -1,25 +1,23 @@
 const path = require('path');
 const fs = require('fs');
+const buildPath =  path.join(__dirname, 'project-dist')
+const indexHTMLPath = path.join(buildPath ,'index.html')
+const cssPath = path.join(__dirname, 'components')
+const templatePath = path.join(__dirname, 'template.html')
+const initialPath = path.join(__dirname, 'styles')
+const resultPath = path.join(__dirname, 'project-dist')
+const bundleCss = path.join(resultPath, 'style.css')
 
 async function buildPage() {
   try {
-    const buildPath =  path.join(__dirname, 'project-dist')
-    const indexHTMLPath = path.join(buildPath ,'index.html')
-    const cssPath = path.join(__dirname, 'components')
-    const templatePath = path.join(__dirname, 'template.html')
-// создать директорию project-dist
-
     await fs.promises.rm(buildPath, { recursive: true, force: true });
     await  fs.promises.mkdir(buildPath, {recursive: true});
-    // 
-
-    const readStream = fs.createReadStream(templatePath, 'utf-8');
     const writeStream = fs.createWriteStream(indexHTMLPath);
 
-    readStream.on('data', async (data) => {
+    fs.createReadStream(templatePath, 'utf-8').on('data', async (data) => {
         let template = data.toString();
         const tags = template.match(/{{.+}}/gi);
-        for(const tag of tags) {
+        for (const tag of tags) {
           const tagName = tag.match(/\w+/)[0];
           const component = await fs.promises.readFile(path.join(cssPath, `${tagName}.html`));
           template = template.replace(new RegExp(tag, 'g'), component.toString()); 
@@ -33,12 +31,6 @@ async function buildPage() {
     console.log(err);
   }
 }
-
-// создать бандл
-
-const initialPath = path.join(__dirname, 'styles')
-const resultPath = path.join(__dirname, 'project-dist')
-const bundleCss = path.join(resultPath, 'style.css')
 
 
 async function createBundle() {
@@ -70,7 +62,7 @@ async function createBundle() {
     }
 }
 
-// копировать директорию
+
 async function copyDir(initialPathMain, copyPathMain) {
   fs.promises.mkdir(copyPathMain, { recursive: true })
 
@@ -88,5 +80,5 @@ async function copyDir(initialPathMain, copyPathMain) {
   }
 }
 
-// вызов основной функции
+
 buildPage()
