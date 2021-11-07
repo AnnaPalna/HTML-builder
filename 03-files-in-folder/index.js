@@ -1,7 +1,5 @@
 const path = require('path');
 const fs = require('fs');
-const toKb = 1024;
-
 const fullPath = path.join(__dirname, 'secret-folder')
 
 async function getFiles() {
@@ -12,11 +10,8 @@ async function getFiles() {
                const fileName = path.parse(path.join(fullPath, file.name)).name
                const fileExtension = path.parse(path.join(fullPath, file.name)).ext.slice(1)
 
-               console.log(path.parse(path.join(fullPath, file.name)))
-
                fs.stat(path.join(fullPath, file.name), (err, stats) => {
-                   let fileSize = stats.size/toKb
-                   console.log(`${fileName} - ${fileExtension} - ${fileSize}kb`)
+                   console.log(`${fileName} - ${fileExtension} - ${stats.size}b`)
                })
            }
        }
