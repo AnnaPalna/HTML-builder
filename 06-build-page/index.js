@@ -8,14 +8,8 @@ async function buildPage() {
     const cssPath = path.join(__dirname, 'components')
     const templatePath = path.join(__dirname, 'template.html')
 // создать директорию project-dist
-          const directories = await fs.promises.readdir(__dirname, {recursive: true})
 
-          for (const dir of directories) {
-            if (dir.name === 'project-dist') {
-              await fs.promises.rm(buildPath, { recursive: true});
-            }
-          }
-
+    await fs.promises.rm(buildPath, { recursive: true, force: true });
     await  fs.promises.mkdir(buildPath, {recursive: true});
     // 
 
